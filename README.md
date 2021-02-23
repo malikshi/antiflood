@@ -2,6 +2,7 @@
 # Anti-Flood: DoS, DDoS, Brute Force, SYN/UDP Flood
 > Usage
 ``` 
+wget https://git.io/JtQbB
 chmod +x antiflood.sh
 sudo ./antiflood --start
 sudo ./antiflood --config
