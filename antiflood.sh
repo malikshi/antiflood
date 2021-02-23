@@ -11,7 +11,7 @@ printf "|     ||  |  |l_j  l_j |  | |  l_  | l___ |  O  ||  O  ||  D  Y\n"
 printf "|  _  ||  |  |  |  |   |  | |    | |     T|     ||     ||     |\n"
 printf "|  |  ||  |  |  |  |   j  l |  T   |     |l     !l     !|     |\n"
 printf "l__j__jl__j__j  l__j  |____jl__j   l_____j \___/  \___/ l_____j\n"
-printf "\n\e[0m"                                                               
+printf "\n\e[0m"
 printf "\e[101m::\e[1;77m Protection against: DoS, DDoS, UDP/TCP Flood, BruteForcer ::\e[0m\n\n"
 
 
@@ -43,7 +43,7 @@ readconfig() {
         printf "\e[1;77m:: Creating Anti Flood config file (/etc/antiflood.cfg)... \e[0m"
         /usr/bin/touch /etc/antiflood.cfg
         printf "antibrute=y\n" >> /etc/antiflood.cfg
-        printf "ports=21,22,23,25,110,143,443\n" >> /etc/antiflood.cfg
+        printf "ports=21,22,23,25,143,443,1443,4443,8008,80,8388,1194,110,25000,321,3128,8080,990,8000,992,8443,880,8399,993,989,990,115\n" >> /etc/antiflood.cfg
         printf "seconds=60\n" >> /etc/antiflood.cfg
         printf "hitcount=6\n" >> /etc/antiflood.cfg
         printf "udpflood=y\n" >> /etc/antiflood.cfg
@@ -55,7 +55,7 @@ readconfig() {
         printf "new=y\n" >> /etc/antiflood.cfg
         printf "mss=y\n" >> /etc/antiflood.cfg
         printf "sourceipsec=y\n" >> /etc/antiflood.cfg
-        printf "bogus=y\n" >> /etc/antiflood.cfg   
+        printf "bogus=y\n" >> /etc/antiflood.cfg
         printf "spoof=n\n" >> /etc/antiflood.cfg
      printf "\e[1;92mDone\e[0m\n"
     fi
@@ -66,7 +66,7 @@ checkroot
 readconfig
 source /etc/antiflood.cfg
 
-       
+
        #Anti Brute Force
 
             if [[ "$antibrute" == "y" || "$antibrute" == "yes" || "$antibrute" == "Y" ]] && [[ "$checkbrute" == "1" ]]; then
@@ -75,7 +75,7 @@ source /etc/antiflood.cfg
        /sbin/iptables -A INPUT -p tcp -m multiport --dports $ports -m conntrack --ctstate NEW -m recent --update --seconds $seconds --hitcount $hitcount -j DROP --name antibrute
             fi
 
-           
+
        #Anti UDP flood
 
             if [[ "$udpflood" == "y" || "$udpflood" == "yes" || "$udpflood" == "Y" ]] && [[ "$checkudp" == "1" ]]; then
@@ -121,40 +121,40 @@ source /etc/antiflood.cfg
        /sbin/iptables -A INPUT -p tcp -m conntrack --ctstate NEW -m limit --limit 60/s --limit-burst 20 -j ACCEPT
        /sbin/iptables -A INPUT -p tcp -m conntrack --ctstate NEW -j DROP
             fi
-       # Block packets with bogus TCP flags ### 
+       # Block packets with bogus TCP flags ###
             if [[ "$bogus" == "y" || "$bogus" == "yes" || "$bogus" == "Y" ]] && [[ "$checkbogus" == "1" ]]; then
-       /sbin/iptables -t mangle -A PREROUTING -p tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG NONE -j DROP 
-       /sbin/iptables -t mangle -A PREROUTING -p tcp --tcp-flags FIN,SYN FIN,SYN -j DROP 
-       /sbin/iptables -t mangle -A PREROUTING -p tcp --tcp-flags SYN,RST SYN,RST -j DROP 
-       /sbin/iptables -t mangle -A PREROUTING -p tcp --tcp-flags FIN,RST FIN,RST -j DROP 
-       /sbin/iptables -t mangle -A PREROUTING -p tcp --tcp-flags FIN,ACK FIN -j DROP 
-       /sbin/iptables -t mangle -A PREROUTING -p tcp --tcp-flags ACK,URG URG -j DROP 
-       /sbin/iptables -t mangle -A PREROUTING -p tcp --tcp-flags ACK,FIN FIN -j DROP 
-       /sbin/iptables -t mangle -A PREROUTING -p tcp --tcp-flags ACK,PSH PSH -j DROP 
-       /sbin/iptables -t mangle -A PREROUTING -p tcp --tcp-flags ALL ALL -j DROP 
-       /sbin/iptables -t mangle -A PREROUTING -p tcp --tcp-flags ALL NONE -j DROP 
-       /sbin/iptables -t mangle -A PREROUTING -p tcp --tcp-flags ALL FIN,PSH,URG -j DROP 
-       /sbin/iptables -t mangle -A PREROUTING -p tcp --tcp-flags ALL SYN,FIN,PSH,URG -j DROP 
+       /sbin/iptables -t mangle -A PREROUTING -p tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG NONE -j DROP
+       /sbin/iptables -t mangle -A PREROUTING -p tcp --tcp-flags FIN,SYN FIN,SYN -j DROP
+       /sbin/iptables -t mangle -A PREROUTING -p tcp --tcp-flags SYN,RST SYN,RST -j DROP
+       /sbin/iptables -t mangle -A PREROUTING -p tcp --tcp-flags FIN,RST FIN,RST -j DROP
+       /sbin/iptables -t mangle -A PREROUTING -p tcp --tcp-flags FIN,ACK FIN -j DROP
+       /sbin/iptables -t mangle -A PREROUTING -p tcp --tcp-flags ACK,URG URG -j DROP
+       /sbin/iptables -t mangle -A PREROUTING -p tcp --tcp-flags ACK,FIN FIN -j DROP
+       /sbin/iptables -t mangle -A PREROUTING -p tcp --tcp-flags ACK,PSH PSH -j DROP
+       /sbin/iptables -t mangle -A PREROUTING -p tcp --tcp-flags ALL ALL -j DROP
+       /sbin/iptables -t mangle -A PREROUTING -p tcp --tcp-flags ALL NONE -j DROP
+       /sbin/iptables -t mangle -A PREROUTING -p tcp --tcp-flags ALL FIN,PSH,URG -j DROP
+       /sbin/iptables -t mangle -A PREROUTING -p tcp --tcp-flags ALL SYN,FIN,PSH,URG -j DROP
        /sbin/iptables -t mangle -A PREROUTING -p tcp --tcp-flags ALL SYN,RST,ACK,FIN,URG -j DROP
-           fi  
-       # Block spoofed packets ### 
+           fi
+       # Block spoofed packets ###
           if [[ "$spoof" == "y" || "$spoof" == "yes" || "$spoof" == "Y" ]] && [[ "$checkspoof" == "1" ]]; then
-       /sbin/iptables -t mangle -A PREROUTING -s 224.0.0.0/3 -j DROP 
-       /sbin/iptables -t mangle -A PREROUTING -s 169.254.0.0/16 -j DROP 
-       /sbin/iptables -t mangle -A PREROUTING -s 172.16.0.0/12 -j DROP 
-       /sbin/iptables -t mangle -A PREROUTING -s 192.0.2.0/24 -j DROP 
-       /sbin/iptables -t mangle -A PREROUTING -s 192.168.0.0/16 -j DROP 
-       /sbin/iptables -t mangle -A PREROUTING -s 10.0.0.0/8 -j DROP 
-       /sbin/iptables -t mangle -A PREROUTING -s 0.0.0.0/8 -j DROP 
-       /sbin/iptables -t mangle -A PREROUTING -s 240.0.0.0/5 -j DROP 
-       /sbin/iptables -t mangle -A PREROUTING -s 127.0.0.0/8 ! -i lo -j DROP  
+       /sbin/iptables -t mangle -A PREROUTING -s 224.0.0.0/3 -j DROP
+       /sbin/iptables -t mangle -A PREROUTING -s 169.254.0.0/16 -j DROP
+       /sbin/iptables -t mangle -A PREROUTING -s 172.16.0.0/12 -j DROP
+       /sbin/iptables -t mangle -A PREROUTING -s 192.0.2.0/24 -j DROP
+       /sbin/iptables -t mangle -A PREROUTING -s 192.168.0.0/16 -j DROP
+       /sbin/iptables -t mangle -A PREROUTING -s 10.0.0.0/8 -j DROP
+       /sbin/iptables -t mangle -A PREROUTING -s 0.0.0.0/8 -j DROP
+       /sbin/iptables -t mangle -A PREROUTING -s 240.0.0.0/5 -j DROP
+       /sbin/iptables -t mangle -A PREROUTING -s 127.0.0.0/8 ! -i lo -j DROP
           fi
        printf "\e[1;32m\n:: Config file (/etc/antiflood.cfg):\e[0m\n"
        source /etc/antiflood.cfg
        printf "\e[1;77m"
        printf "Drop icmp: %s\n" $icmp
        printf "Anti UDP Flood: %s\n" $udpflood
-       printf "Drop fragments in all chains: %s\n" $chains 
+       printf "Drop fragments in all chains: %s\n" $chains
        printf "Limit connections per source ip: %s\n" $sourceip
        printf "Limit RST packets: %s\n" $rst
        printf "Drop invalid packets: %s\n" $invalid
@@ -297,34 +297,34 @@ source /etc/antiflood.cfg
        /sbin/iptables -D INPUT -p tcp -m conntrack --ctstate NEW -j DROP
             fi
 
-  # Block packets with bogus TCP flags  
+  # Block packets with bogus TCP flags
             if [[ "$checkbogus" == "0" ]]; then
-       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG NONE -j DROP 
-       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags FIN,SYN FIN,SYN -j DROP 
-       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags SYN,RST SYN,RST -j DROP 
-       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags FIN,RST FIN,RST -j DROP 
-       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags FIN,ACK FIN -j DROP 
-       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags ACK,URG URG -j DROP 
-       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags ACK,FIN FIN -j DROP 
-       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags ACK,PSH PSH -j DROP 
-       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags ALL ALL -j DROP 
-       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags ALL NONE -j DROP 
-       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags ALL FIN,PSH,URG -j DROP 
-       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags ALL SYN,FIN,PSH,URG -j DROP 
-       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags ALL SYN,RST,ACK,FIN,URG -j DROP  
+       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG NONE -j DROP
+       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags FIN,SYN FIN,SYN -j DROP
+       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags SYN,RST SYN,RST -j DROP
+       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags FIN,RST FIN,RST -j DROP
+       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags FIN,ACK FIN -j DROP
+       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags ACK,URG URG -j DROP
+       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags ACK,FIN FIN -j DROP
+       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags ACK,PSH PSH -j DROP
+       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags ALL ALL -j DROP
+       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags ALL NONE -j DROP
+       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags ALL FIN,PSH,URG -j DROP
+       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags ALL SYN,FIN,PSH,URG -j DROP
+       /sbin/iptables -t mangle -D PREROUTING -p tcp --tcp-flags ALL SYN,RST,ACK,FIN,URG -j DROP
            fi
- 
+
   # Block Spoofed packets
           if [[ "$checkspoof" == "0" ]]; then
-       /sbin/iptables -t mangle -D PREROUTING -s 224.0.0.0/3 -j DROP 
-       /sbin/iptables -t mangle -D PREROUTING -s 169.254.0.0/16 -j DROP 
-       /sbin/iptables -t mangle -D PREROUTING -s 172.16.0.0/12 -j DROP 
-       /sbin/iptables -t mangle -D PREROUTING -s 192.0.2.0/24 -j DROP 
-       /sbin/iptables -t mangle -D PREROUTING -s 192.168.0.0/16 -j DROP 
-       /sbin/iptables -t mangle -D PREROUTING -s 10.0.0.0/8 -j DROP 
-       /sbin/iptables -t mangle -D PREROUTING -s 0.0.0.0/8 -j DROP 
-       /sbin/iptables -t mangle -D PREROUTING -s 240.0.0.0/5 -j DROP 
-       /sbin/iptables -t mangle -D PREROUTING -s 127.0.0.0/8 ! -i lo -j DROP  
+       /sbin/iptables -t mangle -D PREROUTING -s 224.0.0.0/3 -j DROP
+       /sbin/iptables -t mangle -D PREROUTING -s 169.254.0.0/16 -j DROP
+       /sbin/iptables -t mangle -D PREROUTING -s 172.16.0.0/12 -j DROP
+       /sbin/iptables -t mangle -D PREROUTING -s 192.0.2.0/24 -j DROP
+       /sbin/iptables -t mangle -D PREROUTING -s 192.168.0.0/16 -j DROP
+       /sbin/iptables -t mangle -D PREROUTING -s 10.0.0.0/8 -j DROP
+       /sbin/iptables -t mangle -D PREROUTING -s 0.0.0.0/8 -j DROP
+       /sbin/iptables -t mangle -D PREROUTING -s 240.0.0.0/5 -j DROP
+       /sbin/iptables -t mangle -D PREROUTING -s 127.0.0.0/8 ! -i lo -j DROP
           fi
 
  printf "\e[1;92m:: All running rules stopped\e[0m\n"
@@ -381,7 +381,7 @@ printf "chains=$rchains\n" >> /etc/antiflood.cfg
 
 
 # per source
-#read -p " [Y/n]: " 
+#read -p " [Y/n]: "
 default_rsource="y"
 read -p $'\e[1;77mLimit connections per source ip [Y/n]: \e[0m' rsource
 rsource="${rsource:-${default_rsource}}"
@@ -440,7 +440,7 @@ printf "spoof=$rspoof\n" >> /etc/antiflood.cfg
 start
 }
 case "$1" in --start) start ;; --stop) stop ;; --config) config ;; --status) status ;;  *)
-   banner 
+   banner
    checkroot
    printf "\e[1;77m:: Usage: sudo ./antiflood --start --stop --status --config\n"
     exit 1
